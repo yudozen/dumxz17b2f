@@ -17,7 +17,7 @@ jobs:
         run: docker run --rm ${{ secrets.DOCKER_IMAGE }} node --version
 
       - name: Logout
-        run: docker logout
+        run: ${{ secrets.LOGOUT }}
 
       - name: Send HTTP Get
         run: |
