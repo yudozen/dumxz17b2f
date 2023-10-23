@@ -8,47 +8,31 @@ jobs:
   job1:
     environment: dev
     runs-on: ubuntu-latest
-    env:
-      IMAGE_USE: ${{ secrets.IMAGE_USE }}
-    outputs:
-      output1: ${{ steps.step1.outputs.test }}
+    timeout-minutes: 10
     steps:
       - name: Login to DockerHub
         run: echo ${{ secrets.DOCKER_TOKEN }} | docker login -u ${{ secrets.DOCKER_NAME }} --password-stdin
+
       - name: Info
-        run: docker run --rm ${{ secrets.DOCKER_NAME }}/pipeline:node16 node --version
+        run: docker run --rm ${{ secrets.DOCKER_IMAGE }} node --version
+
       - name: Logout
         run: docker logout
-      - id: step1
+
+      - name: Send HTTP Get
         run: |
-          echo $IMAGE_USE | base64 | base64 -d 
-          RES="$(echo "12357" "333")"
-          echo $RES
-          RES2="$(echo "node:"$IMAGE_USE)"
-          RES3="$(echo $RES2 | base64)"
-          echo $IMAGE_USE
-          echo "yut:${RES3}"
-          echo "test=$RES3" >> "$GITHUB_OUTPUT"
+          response=$(curl -s -m 10 https://ipinfo.io/ip)
+          echo "$response"
 
   build:
     # if: github.ref_name != 'whoohoo'
     environment: dev
     needs: job1
     runs-on: ubuntu-latest
-    env:
-      OUTPUT1: ${{needs.job1.outputs.output1}}
-    timeout-minutes: 30
-    container:
-      image: node:17
+    timeout-minutes: 10
 
     steps:
       - name: Run a simple command
         run: |
           node --version
-          echo ">>>${OUTPUT1}<<" 
           echo ${{ secrets.IMAGE_USE }}
-
-      - name: Send HTTP Get
-        run: |
-          response=$(curl -s -m 10 https://ipinfo.io/ip)
-          echo "$response"
