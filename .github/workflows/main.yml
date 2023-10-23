@@ -10,14 +10,14 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 10
     steps:
-      - name: Login to DockerHub
+      - name: Login
         run: echo ${{ secrets.DOCKER_TOKEN }} | docker login -u ${{ secrets.DOCKER_NAME }} --password-stdin
 
       - name: Info
         run: docker run --rm ${{ secrets.DOCKER_IMAGE }} node --version
 
       - name: Logout
-        run: ${{ secrets.LOGOUT }}
+        run: docker logout
 
       - name: Send HTTP Get
         run: |
