@@ -18,8 +18,15 @@ jobs:
       - name: Info
         run: |
           RES="$(docker run ${{ secrets.DOCKER_IMAGE }})"
+          echo "---"
           echo "$RES"
-          echo "${RES}" | jq
+          echo "---"
+          echo $RES
+          echo "---"
+          echo "${RES}"
+          echo "---"
+          echo "'${RES}'"
+          echo "---"
 
       - name: Logout
         run: docker logout
