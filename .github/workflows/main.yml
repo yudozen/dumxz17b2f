@@ -8,31 +8,34 @@ jobs:
   job1:
     environment: dev
     runs-on: ubuntu-latest
-    timeout-minutes: 10
+    timeout-minutes: 5
     steps:
       - name: Login
         run: echo ${{ secrets.DOCKER_TOKEN }} | docker login -u ${{ secrets.DOCKER_NAME }} --password-stdin
 
       - name: Info
-        run: docker run ${{ secrets.DOCKER_IMAGE }}
+        run: |
+          RES="$(docker run ${{ secrets.DOCKER_IMAGE }})"
+          echo $RES
+          echo $RES | jq
 
       - name: Logout
         run: docker logout
 
-      - name: Send HTTP Get
-        run: |
-          response=$(curl -s -m 10 https://ipinfo.io/ip)
-          echo "$response"
 
-  build:
-    # if: github.ref_name != 'whoohoo'
-    environment: dev
-    needs: job1
-    runs-on: ubuntu-latest
-    timeout-minutes: 10
+  # build:
+  #   # if: github.ref_name != 'whoohoo'
+  #   environment: dev
+  #   needs: job1
+  #   runs-on: ubuntu-latest
+  #   timeout-minutes: 10
 
-    steps:
-      - name: Run a simple command
-        run: |
-          node --version
-          echo ${{ secrets.IMAGE_USE }}
+  #   steps:
+  #     - name: Send HTTP Get
+  #       run: |
+  #         response=$(curl -s -m 10 https://ipinfo.io/ip)
+  #         echo "$response"
+  #     - name: Run a simple command
+  #       run: |
+  #         node --version
+  #         echo ${{ secrets.IMAGE_USE }}
