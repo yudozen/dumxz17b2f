@@ -17,9 +17,7 @@ jobs:
 
       - name: Info
         run: |
-          docker run ${{ secrets.DOCKER_IMAGE }} > a.out
-          cat a.out
-          cat a.out | jq
+          docker run ${{ secrets.DOCKER_IMAGE }} | jq
 
       - name: Logout
         run: docker logout
