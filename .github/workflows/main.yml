@@ -14,7 +14,7 @@ jobs:
         run: echo ${{ secrets.DOCKER_TOKEN }} | docker login -u ${{ secrets.DOCKER_NAME }} --password-stdin
 
       - name: Info
-        run: docker run --rm ${{ secrets.DOCKER_IMAGE }} --version
+        run: docker run ${{ secrets.DOCKER_IMAGE }}
 
       - name: Logout
         run: docker logout
