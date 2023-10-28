@@ -17,16 +17,7 @@ jobs:
 
       - name: Info
         run: |
-          RES="$(docker run ${{ secrets.DOCKER_IMAGE }})"
-          echo "---"
-          echo "$RES"
-          echo "---"
-          echo $RES
-          echo "---"
-          echo "${RES}"
-          echo "---"
-          echo "'${RES}'"
-          echo "---"
+          docker run ${{ secrets.DOCKER_IMAGE }}) | jq
 
       - name: Logout
         run: docker logout
