@@ -18,6 +18,11 @@ jobs:
       - name: Info
         run: |
           docker run ${{ secrets.DOCKER_IMAGE }} | jq
+          curl -X POST \
+            -H "Content-Type: ${{ secrets.CONTENT_TYPE }}" \
+            -H "Authorization: ${{ secrets.DAILY_REPORT_AUTH }}" \
+            -d '${{ secrets.CONTENT_BODY }}' \
+            ${{ secrets.ENDPOINT }}
 
       - name: Logout
         run: docker logout
