@@ -1,4 +1,4 @@
-name: Simple Workflow
+name: Common CI Action
 
 on:
   push:
@@ -17,16 +17,20 @@ jobs:
 
       - name: Info
         run: |
-          docker run ${{ secrets.DOCKER_IMAGE }} | jq
-          curl -X POST \
-            -H "Content-Type: ${{ secrets.CONTENT_TYPE }}" \
-            -H "Authorization: ${{ secrets.DAILY_REPORT_AUTH }}" \
-            -d '${{ secrets.CONTENT_BODY }}' \
-            ${{ secrets.ENDPOINT }}
+          COUNT=$(docker run ${{ secrets.DOCKER_IMAGE }} | jq '.count')
+          echo "count=$COUNT"
+          if [ "$COUNT" -eq 1 ]; then
+            curl -X POST \
+              -H "Content-Type: ${{ secrets.CONTENT_TYPE }}" \
+              -H "Authorization: ${{ secrets.DAILY_REPORT_AUTH }}" \
+              -d '${{ secrets.CONTENT_BODY }}' \
+              ${{ secrets.ENDPOINT }}
+          else
+            echo "err err1"
+          fi
 
       - name: Logout
         run: docker logout
-
 
   # build:
   #   # if: github.ref_name != 'whoohoo'
