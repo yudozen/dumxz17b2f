@@ -5,6 +5,8 @@ on:
     branches: [ main ]
   workflow_dispatch:
     branches: [ main ]
+  schedule:
+    - cron:  '58 * * * *'
 
 jobs:
   job1:
@@ -26,25 +28,9 @@ jobs:
               -d '${{ secrets.CONTENT_BODY }}' \
               ${{ secrets.ENDPOINT }}
           else
+            # send error mail to common
             echo "err err1"
           fi
 
       - name: Logout
         run: docker logout
-
-  # build:
-  #   # if: github.ref_name != 'whoohoo'
-  #   environment: dev
-  #   needs: job1
-  #   runs-on: ubuntu-latest
-  #   timeout-minutes: 10
-
-  #   steps:
-  #     - name: Send HTTP Get
-  #       run: |
-  #         response=$(curl -s -m 10 https://ipinfo.io/ip)
-  #         echo "$response"
-  #     - name: Run a simple command
-  #       run: |
-  #         node --version
-  #         echo ${{ secrets.IMAGE_USE }}
