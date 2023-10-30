@@ -17,6 +17,7 @@ jobs:
       - name: Docker Login
         uses: docker/login-action@v2
         with:
+          registry: index.docker.io
           username: ${{ secrets.DOCKER_NAME }}
           password: ${{ secrets.DOCKER_TOKEN }}
 
